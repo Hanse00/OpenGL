@@ -1,11 +1,18 @@
 package dk.philiphansen.opengl;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+
 public class Main {
+	private int timer;
+	private long lastTime;
+	private ArrayList<Square> squares = new ArrayList<Square>();
+
 	public static void main(String[] argv) {
 		new Main().start();
 	}
@@ -19,8 +26,14 @@ public class Main {
 
 		setupOpengl();
 
+		squares.add(new Square(100, 0, 100, 0.5f, 1.0f, 0.5f, Directions.RIGHT, 0, 50));
+		squares.add(new Square(100, 200, 0, 1.0f, 0.5f, 0.5f, Directions.UP, 10, 0));
+		squares.add(new Square(100, 500, 0, 0.5f, 0.5f, 1.0f, Directions.UP, 15, 0));
+		squares.add(new Square(100, 700, 400, 1.0f, 1.0f, 0.5f, Directions.LEFT, 0, 30));
+		squares.add(new Square(100, 350, 500, 1.0f, 0.75f, 0.5f, Directions.DOWN, 60, 0));
+
 		while (!Display.isCloseRequested()) {
-			render();
+			update();
 			Display.update();
 			Display.sync(60);
 		}
@@ -46,31 +59,31 @@ public class Main {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
-	private void render() {
+	private void update() {
+		timer += getDelta();
+
+		if (timer >= 20) {
+			for (Square square : squares) {
+				square.update();
+			}
+			timer = 0;
+		}
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-		GL11.glColor3f(0.5f,0.5f,1.0f);
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glVertex2f(100,100);
-		GL11.glVertex2f(100+100,100);
-		GL11.glVertex2f(100+100,100+100);
-		GL11.glVertex2f(100,100+100);
-		GL11.glEnd();
+		for (Square square : squares) {
+			square.render();
+		}
+	}
 
-		GL11.glColor3f(0.5f,1.0f, 0.5f);
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glVertex2f(300,100);
-		GL11.glVertex2f(300+300,100);
-		GL11.glVertex2f(300+300,100+300);
-		GL11.glVertex2f(300,100+300);
-		GL11.glEnd();
+	private int getDelta() {
+		long time = getTime();
+		int delta = (int) (time - lastTime);
+		lastTime = time;
 
-		GL11.glColor3f(1.0f,0.5f, 0.5f);
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glVertex2f(150,150);
-		GL11.glVertex2f(150+200,150);
-		GL11.glVertex2f(150+200,150+200);
-		GL11.glVertex2f(150,150+200);
-		GL11.glEnd();
+		return delta;
+	}
+
+	private long getTime() {
+		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 }
