@@ -36,7 +36,7 @@ public class Square {
 				}
 				break;
 			case DOWN:
-				if (yCoord > 0) {
+				if (yCoord > -size) {
 					yCoord -= vertialMoveSpeed;
 				} else {
 					yCoord = Display.getHeight() + size;
@@ -50,7 +50,7 @@ public class Square {
 				}
 				break;
 			case LEFT:
-				if (xCoord > 0) {
+				if (xCoord > -size) {
 					xCoord -= horizontalMoveSpeed;
 				} else {
 					xCoord = Display.getWidth() + size;
