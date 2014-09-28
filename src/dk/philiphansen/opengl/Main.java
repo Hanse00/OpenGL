@@ -26,11 +26,11 @@ public class Main {
 
 		setupOpengl();
 
-		squares.add(new Square(100, 0, 100, 0.5f, 1.0f, 0.5f, Directions.RIGHT, 0, 28));
-		squares.add(new Square(100, 200, 0, 1.0f, 0.5f, 0.5f, Directions.UP, 16, 0));
-		squares.add(new Square(100, 500, 0, 0.5f, 0.5f, 1.0f, Directions.UP, 6, 0));
-		squares.add(new Square(100, 700, 400, 1.0f, 1.0f, 0.5f, Directions.LEFT, 0, 20));
-		squares.add(new Square(100, 350, 500, 1.0f, 0.75f, 0.5f, Directions.DOWN, 26, 0));
+		squares.add(new Square(100, 0, 100, 0.5f, 1.0f, 0.5f, Directions.RIGHT, 28));
+		squares.add(new Square(100, 200, 0, 1.0f, 0.5f, 0.5f, Directions.UP, 16));
+		squares.add(new Square(100, 500, 0, 0.5f, 0.5f, 1.0f, Directions.UP, 6));
+		squares.add(new Square(100, 700, 400, 1.0f, 1.0f, 0.5f, Directions.LEFT, 20));
+		squares.add(new Square(100, 350, 500, 1.0f, 0.75f, 0.5f, Directions.DOWN, 26));
 
 		while (!Display.isCloseRequested()) {
 			update();

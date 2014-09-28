@@ -11,10 +11,9 @@ public class Square {
 	private float green;
 	private float blue;
 	private Directions direction;
-	private int vertialMoveSpeed;
-	private int horizontalMoveSpeed;
+	private int moveSpeed;
 
-	public Square(int size, int startX, int startY, float red, float green, float blue, Directions direction, int vertialMoveSpeed, int horizontalMoveSpeed) {
+	public Square(int size, int startX, int startY, float red, float green, float blue, Directions direction, int moveSpeed) {
 		this.size = size;
 		xCoord = startX;
 		yCoord = startY;
@@ -22,41 +21,56 @@ public class Square {
 		this.green = green;
 		this.blue = blue;
 		this.direction = direction;
-		this.vertialMoveSpeed = vertialMoveSpeed;
-		this.horizontalMoveSpeed = horizontalMoveSpeed;
+		this.moveSpeed = moveSpeed;
 	}
 
 	public void update() {
+		move();
+		if (outOfBounds()) {
+			reset();
+		}
+	}
+
+	private void move() {
+		xCoord += direction.getX() * moveSpeed;
+		yCoord += direction.getY() * moveSpeed;
+	}
+
+	private void reset() {
 		switch (direction) {
 			case UP:
-				if (yCoord < Display.getHeight()) {
-					yCoord += vertialMoveSpeed;
-				} else {
-					yCoord = -size;
-				}
+				yCoord = -size;
 				break;
 			case DOWN:
-				if (yCoord > -size) {
-					yCoord -= vertialMoveSpeed;
-				} else {
-					yCoord = Display.getHeight() + size;
-				}
+				yCoord = Display.getHeight();
 				break;
 			case RIGHT:
-				if (xCoord < Display.getWidth()) {
-					xCoord += horizontalMoveSpeed;
-				} else {
-					xCoord = -size;
-				}
+				xCoord = -size;
 				break;
 			case LEFT:
-				if (xCoord > -size) {
-					xCoord -= horizontalMoveSpeed;
-				} else {
-					xCoord = Display.getWidth() + size;
-				}
+				xCoord = Display.getWidth();
 				break;
 		}
+	}
+
+	private boolean outOfBounds() {
+		return outLeft() || outRight() || outBottom() || outTop();
+	}
+
+	private boolean outLeft() {
+		return xCoord + size < 0;
+	}
+
+	private boolean outRight() {
+		return xCoord > Display.getWidth();
+	}
+
+	private boolean outBottom() {
+		return yCoord + size < 0;
+	}
+
+	private boolean outTop() {
+		return yCoord > Display.getHeight();
 	}
 
 	public void render() {
