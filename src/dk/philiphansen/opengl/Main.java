@@ -6,18 +6,23 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class Main {
 	private int timer;
 	private long lastTime;
 	private ArrayList<Square> squares = new ArrayList<Square>();
+	private OptionsPanel panel;
 
 	public static void main(String[] argv) {
 		new Main().start();
 	}
 
 	public void start() {
+		panel = new OptionsPanel();
+
 		try {
 			createDisplay();
 		} catch (LWJGLException e) {
@@ -37,8 +42,7 @@ public class Main {
 			Display.update();
 			Display.sync(60);
 		}
-
-		Display.destroy();
+		close();
 	}
 
 	private void createDisplay() throws LWJGLException {
@@ -55,8 +59,16 @@ public class Main {
 	private void setupOpengl() {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, 800, 0, 600, 1, -1);
+		GL11.glOrtho(0, Display.getWidth(), 0, Display.getHeight(), 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+	}
+
+	private void close() {
+		Display.destroy();
+		WindowEvent event = new WindowEvent(panel, WindowEvent.WINDOW_CLOSING);
+		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(event);
+		panel.setVisible(false);
+		panel.dispose();
 	}
 
 	private void update() {
