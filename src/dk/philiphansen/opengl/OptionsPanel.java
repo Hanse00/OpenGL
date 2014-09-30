@@ -6,8 +6,6 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class OptionsPanel extends JFrame {
-	private ArrayList<Square> squares = new ArrayList<Square>();
-
 	public OptionsPanel() {
 		setTitle("Options");
 		setSize(300, 500);
@@ -16,15 +14,12 @@ public class OptionsPanel extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				Main.stop = true;
+				Main.running = false;
 			}
 		});
 	}
 
 	public void close() {
-		System.out.println("Stopping control panel");
 		dispose();
 	}
-
-
 }

@@ -15,16 +15,14 @@ public class Main {
 	private static ArrayList<Square> squares;
 	private static OptionsPanel panel;
 	private static Render render;
-	public static boolean stop;
+	private static int timer;
+	private static long lastTime;
+	public static boolean running;
 
 	public static void main(String[] argv) {
-		squares = new ArrayList<Square>();
+		running = true;
 
-		squares.add(new Square(100, 0, 100, 0.5f, 1.0f, 0.5f, Directions.RIGHT, 28));
-		squares.add(new Square(100, 200, 0, 1.0f, 0.5f, 0.5f, Directions.UP, 16));
-		squares.add(new Square(100, 500, 0, 0.5f, 0.5f, 1.0f, Directions.UP, 6));
-		squares.add(new Square(100, 700, 400, 1.0f, 1.0f, 0.5f, Directions.LEFT, 20));
-		squares.add(new Square(100, 350, 500, 1.0f, 0.75f, 0.5f, Directions.DOWN, 26));
+		squares = new ArrayList<Square>();
 
 		panel = new OptionsPanel();
 		render = new Render();
@@ -35,23 +33,29 @@ public class Main {
 	}
 
 	private static void update() {
-		try {
-			while (!stop) {
-				System.out.println("");
-				Thread.sleep(1000);
+		while (running) {
+			timer += getDelta();
+			System.out.println(timer);
+
+			if (timer >= 20) {
+				for (Square square : squares) {
+					square.update();
+				}
+				timer = 0;
 			}
-			stop();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			System.exit(-2);
 		}
 	}
 
-	private static void stop() {
-		System.out.println("Calling stop");
-		render.stop();
-		panel.close();
-		System.exit(-1);
+	private static int getDelta() {
+		long time = getTime();
+		int delta = (int) (time - lastTime);
+		lastTime = time;
+
+		return delta;
+	}
+
+	private static long getTime() {
+		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
 	public static ArrayList<Square> getSquares() {
