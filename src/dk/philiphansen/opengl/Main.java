@@ -14,36 +14,53 @@ import java.util.ArrayList;
 public class Main {
 	private static ArrayList<Square> squares;
 	private static OptionsPanel panel;
-	private static Render render;
 	private static int timer;
 	private static long lastTime;
-	public static boolean running;
+	private static boolean running;
+	private static Thread renderThread;
 
 	public static void main(String[] argv) {
 		running = true;
 
 		squares = new ArrayList<Square>();
+		squares.add(new Square(100, 100, 0, 1.0f, 0.5f, 0.5f, Directions.UP, 20));
 
 		panel = new OptionsPanel();
-		render = new Render();
 
-		render.init();
+		renderThread = new Thread(new Render());
+		renderThread.start();
 
-		update();
+		mainLoop();
 	}
 
-	private static void update() {
+	private static void mainLoop() {
 		while (running) {
 			timer += getDelta();
-			System.out.println(timer);
 
-			if (timer >= 20) {
+			if (timer >= ((float) 1/60 * 1000)) {
 				for (Square square : squares) {
 					square.update();
 				}
 				timer = 0;
 			}
+
+			sleep();
 		}
+	}
+
+	private static void sleep() {
+		try {
+			Thread.sleep(0);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			stop();
+		}
+	}
+
+	public static synchronized void stop() {
+		running = false;
+		renderThread.interrupt();
+		System.exit(0);
 	}
 
 	private static int getDelta() {
@@ -60,5 +77,9 @@ public class Main {
 
 	public static ArrayList<Square> getSquares() {
 		return squares;
+	}
+
+	public static void addSquare(Square square) {
+		squares.add(square);
 	}
 }

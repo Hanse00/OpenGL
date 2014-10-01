@@ -6,8 +6,9 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-public class Render {
-	public void init() {
+public class Render implements Runnable {
+	@Override
+	public void run() {
 		try {
 			createDisplay();
 		} catch (LWJGLException e) {
@@ -15,16 +16,7 @@ public class Render {
 		}
 
 		setupOpengl();
-
-		while (Main.running) {
-			if (Display.isCloseRequested()) {
-				Main.running = false;
-			}
-			update();
-			Display.sync(60);
-		}
-
-		Display.destroy();
+		updateLoop();
 	}
 
 	private void createDisplay() throws LWJGLException {
@@ -35,7 +27,7 @@ public class Render {
 
 	private void handleException(LWJGLException e) {
 		e.printStackTrace();
-		System.exit(0);
+		Main.stop();
 	}
 
 	private void setupOpengl() {
@@ -45,7 +37,18 @@ public class Render {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
-	private void update() {
+	private void updateLoop() {
+		while (!Thread.interrupted()) {
+			if (Display.isCloseRequested()) {
+				Main.stop();
+			}
+			render();
+			Display.sync(60);
+		}
+		Display.destroy();
+	}
+
+	private void render() {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		for (Square square : Main.getSquares()) {
@@ -53,5 +56,13 @@ public class Render {
 		}
 
 		Display.update();
+	}
+
+	public int getWidth() {
+		return Display.getWidth();
+	}
+
+	public int getHeight() {
+		return Display.getHeight();
 	}
 }
