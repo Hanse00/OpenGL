@@ -24,12 +24,22 @@ public class OptionsPanel extends JFrame {
 	private JComboBox directionPicker;
 	private JButton addButton;
 	private JButton clearButton;
+	private JLabel sizeLabel;
+	private JLabel startXLabel;
+	private JLabel startYLabel;
+	private JLabel redLabel;
+	private JLabel greenLabel;
+	private JLabel blueLabel;
+	private JLabel directionLabel;
+	private JLabel speedLabel;
+	private GridBagConstraints constraints;
 
 	public OptionsPanel() {
 		setupFrame();
 		setupPanel();
 		setupIntegerFormat();
 
+		defineLabels();
 		defineIntegerFields();
 		defineSliders();
 		defineComboBox();
@@ -42,7 +52,7 @@ public class OptionsPanel extends JFrame {
 
 	private void setupFrame() {
 		setTitle("Options");
-		setSize(800, 100);
+		setSize(800, 200);
 
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -54,8 +64,27 @@ public class OptionsPanel extends JFrame {
 
 	private void setupPanel() {
 		panel = new JPanel();
+		setResizable(false);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		panel.setLayout(new GridLayout(1, 11));
+		panel.setLayout(new GridBagLayout());
+		constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.ipadx = 10;
+		constraints.ipady = 10;
+		constraints.insets = new Insets(5, 5, 5, 5);
+	}
+
+	private void defineLabels() {
+		sizeLabel = new JLabel("Size");
+		startXLabel = new JLabel("X Position");
+		startYLabel = new JLabel("Y Position");
+		redLabel = new JLabel("Red");
+		greenLabel = new JLabel("Green");
+		blueLabel = new JLabel("Blue");
+		directionLabel = new JLabel("Direction");
+		speedLabel = new JLabel("Speed");
 	}
 
 	private void defineIntegerFields() {
@@ -124,16 +153,70 @@ public class OptionsPanel extends JFrame {
 	}
 
 	private void addAllComponents() {
-		panel.add(sizeField);
-		panel.add(startXSlider);
-		panel.add(startYSlider);
-		panel.add(redSlider);
-		panel.add(greenSlider);
-		panel.add(blueSlider);
-		panel.add(directionPicker);
-		panel.add(speedField);
-		panel.add(addButton);
-		panel.add(clearButton);
+		panel.add(sizeLabel, constraints);
+
+		constraints.gridx = 1;
+		panel.add(startXLabel, constraints);
+
+		constraints.gridx = 2;
+		panel.add(startYLabel, constraints);
+
+		constraints.gridx = 3;
+		panel.add(redLabel, constraints);
+
+		constraints.gridx = 4;
+		panel.add(greenLabel, constraints);
+
+		constraints.gridx = 5;
+		panel.add(blueLabel, constraints);
+
+		constraints.gridx = 6;
+		panel.add(directionLabel, constraints);
+
+		constraints.gridx = 7;
+		panel.add(speedLabel, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 0;
+		panel.add(sizeField, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 1;
+		panel.add(startXSlider, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 2;
+		panel.add(startYSlider, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 3;
+		panel.add(redSlider, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 4;
+		panel.add(greenSlider, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 5;
+		panel.add(blueSlider, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 6;
+		panel.add(directionPicker, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 7;
+		panel.add(speedField, constraints);
+
+		constraints.gridy = 2;
+		constraints.gridx = 0;
+		constraints.gridwidth = 2;
+		panel.add(addButton, constraints);
+
+		constraints.gridy = 2;
+		constraints.gridx = 6;
+		constraints.gridwidth = 2;
+		panel.add(clearButton, constraints);
 	}
 
 	private void setupIntegerFormat() {
