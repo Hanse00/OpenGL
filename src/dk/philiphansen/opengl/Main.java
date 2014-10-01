@@ -82,4 +82,8 @@ public class Main {
 	public static void addSquare(Square square) {
 		squares.add(square);
 	}
+
+	public static void clearSquares() {
+		squares.clear();
+	}
 }

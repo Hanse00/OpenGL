@@ -23,6 +23,7 @@ public class OptionsPanel extends JFrame {
 	private JSlider blueSlider;
 	private JComboBox directionPicker;
 	private JButton addButton;
+	private JButton clearButton;
 
 	public OptionsPanel() {
 		setupFrame();
@@ -41,7 +42,7 @@ public class OptionsPanel extends JFrame {
 
 	private void setupFrame() {
 		setTitle("Options");
-		setSize(600, 100);
+		setSize(800, 100);
 
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -54,7 +55,7 @@ public class OptionsPanel extends JFrame {
 	private void setupPanel() {
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		panel.setLayout(new GridLayout(1, 10));
+		panel.setLayout(new GridLayout(1, 11));
 	}
 
 	private void defineIntegerFields() {
@@ -78,6 +79,7 @@ public class OptionsPanel extends JFrame {
 
 	private void defineButton() {
 		addButton = new JButton("Add");
+		clearButton = new JButton("Clear");
 
 		addButton.addActionListener(new ActionListener() {
 			@Override
@@ -112,6 +114,13 @@ public class OptionsPanel extends JFrame {
 				Main.addSquare(new Square(size, startX, startY, red, green, blue, direction, speed));
 			}
 		});
+
+		clearButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.clearSquares();
+			}
+		});
 	}
 
 	private void addAllComponents() {
@@ -124,6 +133,7 @@ public class OptionsPanel extends JFrame {
 		panel.add(directionPicker);
 		panel.add(speedField);
 		panel.add(addButton);
+		panel.add(clearButton);
 	}
 
 	private void setupIntegerFormat() {
