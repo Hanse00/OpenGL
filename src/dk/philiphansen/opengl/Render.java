@@ -6,6 +6,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Iterator;
+
 public class Render implements Runnable {
 	@Override
 	public void run() {
@@ -51,8 +53,11 @@ public class Render implements Runnable {
 	private void render() {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-		for (Square square : Main.getSquares()) {
-			square.render();
+		synchronized (Main.getSquares()) {
+			Iterator<Square> iterator = Main.getSquares().iterator();
+			while (iterator.hasNext()) {
+				iterator.next().render();
+			}
 		}
 
 		Display.update();

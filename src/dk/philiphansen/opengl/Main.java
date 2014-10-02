@@ -7,12 +7,14 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.omg.CORBA.PUBLIC_MEMBER;
 
-import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class Main {
-	private static ArrayList<Square> squares;
+	private static List<Square> squares;
 	private static OptionsPanel panel;
 	private static int timer;
 	private static long lastTime;
@@ -22,7 +24,7 @@ public class Main {
 	public static void main(String[] argv) {
 		running = true;
 
-		squares = new ArrayList<Square>();
+		squares = Collections.synchronizedList(new ArrayList<Square>());
 		squares.add(new Square(100, 100, 0, 1.0f, 0.5f, 0.5f, Directions.UP, 20));
 
 		panel = new OptionsPanel();
@@ -38,12 +40,14 @@ public class Main {
 			timer += getDelta();
 
 			if (timer >= ((float) 1/60 * 1000)) {
-				for (Square square : squares) {
-					square.update();
+				synchronized (squares) {
+					Iterator<Square> iterator = squares.iterator();
+					while (iterator.hasNext()) {
+						iterator.next().update();
+					}
 				}
 				timer = 0;
 			}
-
 			sleep();
 		}
 	}
@@ -75,7 +79,7 @@ public class Main {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
-	public static ArrayList<Square> getSquares() {
+	public static List<Square> getSquares() {
 		return squares;
 	}
 
